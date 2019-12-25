@@ -27,6 +27,10 @@ function load_data
 trap 'echo "\n${progname} has finished\n"' EXIT
 
 
+python3 /connstring-helper.py secret > /uri
+cat /uri
+MDB_URL=$(cat /uri)
+echo "target db: ${MDB_URL}"
 DBARGS="'-p mongodb.url=${MDB_URL}'
 # make sure all the params are set and go.
 if [[ -z ${DBTYPE} || -z ${WORKLETTER} || -z ${DBARGS} ]]; then
