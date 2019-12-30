@@ -26,11 +26,20 @@ function load_data
 # exit message
 trap 'echo "\n${progname} has finished\n"' EXIT
 
+echo "Python version: $(python3 --version)"
+if [[ -z "${BINDING_SECRET}" ]]; then
+  echo "BINDING_SECRET not set, checking for MDB_URL env variable."
+  if [[ -z "${MDB_URL}" ]]; then
+    echo "MDB_URL not set, unable to continue."
+    exit 1
+  fi
+else
+  python3 /connstring-helper.py secret ${NAMESPACE} ${BINDING_SECRET} > /uri
+  cat /uri
+  MDB_URL=$(cat /uri)
+  echo "target db: ${MDB_URL}"
+fi
 
-python3 /connstring-helper.py secret > /uri
-cat /uri
-MDB_URL=$(cat /uri)
-echo "target db: ${MDB_URL}"
 DBARGS="'-p mongodb.url=${MDB_URL}'
 # make sure all the params are set and go.
 if [[ -z ${DBTYPE} || -z ${WORKLETTER} || -z ${DBARGS} ]]; then
