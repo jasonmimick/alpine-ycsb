@@ -27,8 +27,8 @@ ENV YCSB_VERSION=0.17.0 \
 #RUN apk --update --no-cache add python3.7 mksh 
 #RUN pip3 install --upgrade pip
 
-COPY ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz /opt
-RUN cd opt && tar -xvf ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz
+COPY ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz /
+RUN tar -xvf ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz
 
 COPY requirements.txt /requirements.txt
 COPY connstring-helper.py /connstring-helper.py
