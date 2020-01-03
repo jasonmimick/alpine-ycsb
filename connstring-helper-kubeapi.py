@@ -17,11 +17,11 @@ def mode_secret():
   try:
       config.load_kube_config()
   except Exception as exp:
-      dp(f'trying to load incluster config exp:{exp}')
+      dp('trying to load incluster config exp:%s' % (exp))
       config.load_incluster_config()
   v1 = client.CoreV1Api()
   secret = v1.read_namespaced_secret(secret,namespace)
-  dp(f'secret={secret}')
+  dp('secret=%s' %secret)
   uri = b64decode(secret.data['uri']).decode()
   username = b64decode(secret.data['username']).decode()
   password = b64decode(secret.data['password']).decode()
@@ -39,14 +39,14 @@ parts = uri_parser.parse_uri(uri)
 
 parts['username']=u
 parts['password']=p
-dp( f"parts={parts}" )
+dp( "parts="+{parts} )
 if uri.split(':')=='mongodb+srv':
   connstr='mongodb+srv://'
 else:
   connstr='mongodb://'
-dp( f'connstr={connstr}' )
-connstr=f"{connstr}{parts['username']}:{parts['password']}"
+dp( 'connstr=%s' % connstr )
+connstr="%s%s:%s" % ( connstr, parts['username'], parts['password'])
+
 opts=urllib.parse.urlencode(parts['options'])
-#connstr=f"{connstr}{parts['fqdn']}/{parts['db']}?{opts}"
-connstr=f"{connstr}@{parts['fqdn']}/?{opts}"
+connstr='%s@%s/?%s' % ( connstr, parts['fqdn'], opts )
 print(connstr)
