@@ -21,21 +21,26 @@ if p is None:
   print('PASSWORD env not found')
   sys.exit(1)
   
-#print('uri=%s' % uri)
+dp('uri=%s' % uri)
 
 parts = uri_parser.parse_uri(uri)
 
 parts['username']=u
 parts['password']=p
 dp( 'parts=%s' % parts )
-if uri.split(':')=='mongodb+srv':
-  connstr='mongodb+srv://'
-else:
-  connstr='mongodb://'
+connstr='mongodb://'
+
 dp( 'connstr=%s' % connstr )
+
+dp( 'parts=%s' % parts )
 connstr="%s%s:%s" % ( connstr, parts['username'], parts['password'])
 
 #opts=urllib.parse.urlencode(parts['options'])
 opts=urllib.urlencode(parts['options'])
-connstr='%s@%s/?%s' % ( connstr, parts['fqdn'], opts )
+hostlist=[]
+for hostport in parts['nodelist']:
+  hostlist.append('%s:%s' % (hostport[0],hostport[1]))
+
+hosts=','.join(hostlist)
+connstr='%s@%s/?%s' % ( connstr, hosts, opts )
 print(connstr)

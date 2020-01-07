@@ -30,5 +30,9 @@ if [[ -z ${ACTION} || -z ${DBTYPE} || -z ${WORKLETTER} || -z ${DBARGS} ]]; then
   exit 1
 fi
 
+
 cd /ycsb-mongodb-binding-${YCSB_VERSION}
-./bin/ycsb "${ACTION}" "${DBTYPE}" -s -P "workloads/workload${WORKLETTER}" -p mongodb.url="${MDB_URL}"
+cp workloads/workload${WORKLETTER} workloads/work
+sed -i 's/^operationcount.*/operationcount='"${OPERATIONCOUNT}"'/' workloads/work
+sed -i 's/^recordcount.*/recordcount='"${RECORDCOUNT}"'/' workloads/work
+./bin/ycsb "${ACTION}" "${DBTYPE}" -s -P "workloads/work" -p mongodb.url="${MDB_URL}" -p mongodb.upsert="true"
