@@ -40,5 +40,8 @@ for hostport in parts['nodelist']:
   hostlist.append('%s:%s' % (hostport[0],hostport[1]))
 
 hosts=','.join(hostlist)
-connstr='%s@%s/?%s' % ( connstr, hosts, opts )
+if u is not None:
+  connstr='%s@%s/?%s' % ( connstr, hosts, opts )
+else:
+  connstr='%s%s/?%s' % ( connstr, hosts, opts )
 print(connstr)

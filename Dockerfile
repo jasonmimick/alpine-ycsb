@@ -22,7 +22,6 @@ COPY ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz /
 RUN tar -xvf ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz
 
 COPY requirements.txt /requirements.txt
-COPY test.secrets.env /test.secrets.env
 COPY connstring-helper*.py /
 RUN pip install -r /requirements.txt
 COPY start.sh /start.sh
