@@ -14,26 +14,24 @@ uri,u,p = mode_env()
 if uri is None:
   print('URI env not found')
   sys.exit(1)
-if u is None:
-  print('USERNAME env not found')
-  sys.exit(1)
-if p is None:
-  print('PASSWORD env not found')
-  sys.exit(1)
   
 dp('uri=%s' % uri)
 
 parts = uri_parser.parse_uri(uri)
 
-parts['username']=u
-parts['password']=p
+if u is not None:
+  parts['username']=u
+  parts['password']=p
+  
 dp( 'parts=%s' % parts )
 connstr='mongodb://'
 
 dp( 'connstr=%s' % connstr )
 
 dp( 'parts=%s' % parts )
-connstr="%s%s:%s" % ( connstr, parts['username'], parts['password'])
+
+if u is not None:
+  connstr="%s%s:%s" % ( connstr, parts['username'], parts['password'])
 
 #opts=urllib.parse.urlencode(parts['options'])
 opts=urllib.urlencode(parts['options'])
