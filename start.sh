@@ -2,37 +2,27 @@
 
 set -vex
 
-
-#/ycsb-*/bin/ycsb.sh load "${DBTYPE}" -s -P "workloads/workload${WORKLETTER}" "${DBARGS}" && touch /.loaded_data
-
-ls -l /
-
-#echo "Python version: $(python --version)"
-
-#export $(cat /test.secrets.env | xargs)
-#. /test-connstring-helper-env.sh
-
-
-
+# build connection string from secret mounted
+# as environment variables
 python /connstring-helper-env.py > /uri
-cat /uri
+
 MDB_URL=$(cat /uri)
 echo "target db: ${MDB_URL}"
 
+export YCSB_HOME="/ycsb"
 
-YCSB_HOME="/ycsb-mongodb-binding-${YCSB_VERSION}"
-export YCSB_HOME="/ycsb-mongodb-binding-${YCSB_VERSION}"
-DBARGS="-p mongodb.url=${MDB_URL}"
-YCSBBIN="/ycsb-mongodb-binding-${YCSB_VERSION}/bin/ycsb"
 # make sure all the params are set and go.
-if [[ -z ${ACTION} || -z ${DBTYPE} || -z ${WORKLETTER} || -z ${DBARGS} ]]; then
-  echo "Missing params! Exiting"
-  exit 1
+if [[ -z ${ACTION} ]]; then
+  echo "ACTION env not found, default to 'run'"
+  ACTION=run
 fi
 
+ls -l /work
 
-cd /ycsb-mongodb-binding-${YCSB_VERSION}
-cp workloads/workload${WORKLETTER} workloads/work
-sed -i 's/^operationcount.*/operationcount='"${OPERATIONCOUNT}"'/' workloads/work
-sed -i 's/^recordcount.*/recordcount='"${RECORDCOUNT}"'/' workloads/work
-./bin/ycsb "${ACTION}" "${DBTYPE}" -s -P "workloads/work" -p mongodb.url="${MDB_URL}" -p mongodb.upsert="true"
+cd ${YCSB_HOME}
+echo "== workload start"
+echo "Starting workload/work"
+cat /work/workload
+echo "== workload end"
+
+./bin/ycsb "${ACTION}" mongodb -s -P /work/workload -p mongodb.url="${MDB_URL}" -p mongodb.upsert="true"

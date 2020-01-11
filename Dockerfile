@@ -20,6 +20,7 @@ ENV YCSB_VERSION=0.17.0 \
 
 COPY ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz /
 RUN tar -xvf ycsb-mongodb-binding-${YCSB_VERSION}.tar.gz
+RUN mv /ycsb-mongodb-binding-${YCSB_VERSION} /ycsb
 
 COPY requirements.txt /requirements.txt
 COPY connstring-helper*.py /
@@ -27,10 +28,8 @@ RUN pip install -r /requirements.txt
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-ENV ACTION='' DBTYPE='' WORKLETTER='' DBARGS='' RECNUM='' OPNUM=''
+ENV ACTION='' 
 
 FROM app as runtime
-
-WORKDIR "/opt/ycsb-${YCSB_VERSION}"
 
 ENTRYPOINT ["/start.sh"]
