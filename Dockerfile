@@ -12,7 +12,7 @@ RUN apk add --update \
 
 FROM base as app
 
-ENV YCSB_VERSION=0.17.0 \
+ENV YCSB_VERSION=0.18.0-SNAPSHOT \
     PATH=${PATH}:/usr/bin
 
 #RUN apk --update --no-cache add python3.7 mksh 
