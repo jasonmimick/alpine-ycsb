@@ -16,13 +16,17 @@ if [[ -z ${ACTION} ]]; then
   echo "ACTION env not found, default to 'run'"
   ACTION=run
 fi
+if [[ -z ${DB} ]]; then
+  echo "DB env not found, default to 'mongodb'"
+  DB=mongodb
+fi
 
-ls -l /work
 
 cd ${YCSB_HOME}
+echo "YCSB - ACTION=${ACTION} DB=${DB}"
 echo "== workload start"
 echo "Starting workload/work"
 cat /work/workload
 echo "== workload end"
 
-./bin/ycsb "${ACTION}" mongodb -s -P /work/workload -p mongodb.url="${MDB_URL}"
+./bin/ycsb "${ACTION}" "${DB}" -s -P /work/workload -p mongodb.url="${MDB_URL}"

@@ -28,7 +28,8 @@ RUN pip install -r /requirements.txt
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
-ENV ACTION='' 
+ENV DB='mongodb' 
+ENV ACTION='run' 
 
 FROM app as runtime
 
