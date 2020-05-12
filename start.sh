@@ -25,4 +25,4 @@ echo "Starting workload/work"
 cat /work/workload
 echo "== workload end"
 
-./bin/ycsb "${ACTION}" mongodb -s -P /work/workload -p mongodb.url="${MDB_URL}" -p mongodb.upsert="true"
+./bin/ycsb "${ACTION}" mongodb -s -P /work/workload -p mongodb.url="${MDB_URL}"
